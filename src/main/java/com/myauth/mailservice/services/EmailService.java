@@ -14,6 +14,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class EmailService {
         }catch( MailException e){
             log.error("Cannot Send Email to: " +request.getTo());
             mailResponse.setMessage(e.getMessage());
-            response = new ResponseEntity<>(mailResponse,HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(mailResponse,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
@@ -46,7 +47,7 @@ public class EmailService {
         ResponseEntity<MailResponse> response;
         BeanUtils.copyProperties(request,mailRequest);
         try{
-            if(request.getToken()!=null){
+            if(request.getToken()!=null && !ObjectUtils.isEmpty(request.getToken())){
                 mailRequest.setSubject("Verification email");
                 mailRequest.setContent("Click on this verification link to confirm"
                         + "http://localhost:8080/confirmUser?token=" + request.getToken());
@@ -59,7 +60,7 @@ public class EmailService {
         }catch (MailException e){
             log.error("Cannot Send Verification Email to: " +request.getTo());
             mailResponse.setMessage(e.getMessage());
-            response = new ResponseEntity<>(mailResponse,HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(mailResponse,HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (InvalidTokenException e){
             log.error(e.getMessage());
             mailResponse.setMessage(e.getMessage());
