@@ -3,6 +3,7 @@ package com.myauth.mailservice.services;
 import com.myauth.mailservice.Dto.MailRequest;
 import com.myauth.mailservice.Dto.MailResponse;
 import com.myauth.mailservice.Dto.VerificationRequest;
+import com.myauth.mailservice.exceptions.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -53,15 +54,15 @@ public class EmailService {
                 mailResponse.setMessage("Verification Email Sent Succesfully to: " +request.getTo());
                 response = new ResponseEntity<>(mailResponse,HttpStatus.OK);
             }else {
-                throw new NullPointerException();
+                throw new InvalidTokenException("No token provided");
             }
         }catch (MailException e){
             log.error("Cannot Send Verification Email to: " +request.getTo());
             mailResponse.setMessage(e.getMessage());
             response = new ResponseEntity<>(mailResponse,HttpStatus.BAD_REQUEST);
-        }catch (NullPointerException e){
-            log.error("Invalid Token");
-            mailResponse.setMessage("Invalid token ");
+        }catch (InvalidTokenException e){
+            log.error(e.getMessage());
+            mailResponse.setMessage(e.getMessage());
             response = new ResponseEntity<>(mailResponse,HttpStatus.BAD_REQUEST);
         }
         return response;
