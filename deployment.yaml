@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: my-auth-app
+        version: v1.0.0
     spec:
       containers:
       - name: my-auth-app
