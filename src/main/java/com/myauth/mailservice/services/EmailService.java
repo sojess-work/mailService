@@ -31,7 +31,7 @@ public class EmailService {
     public ResponseEntity<MailResponse> sendMail(MailRequest request){
         MailResponse mailResponse = new MailResponse();
         ResponseEntity<MailResponse> response;
-        request.setContent("<h1>Hello"+request.getTo()+"</h1>");
+        request.setContent("<h1> How ya doin! ?</h1>");
         try{
             mailSender.send(createMail(request));
             mailResponse.setMessage("Email Sent Succesfully to: " +request.getTo());
