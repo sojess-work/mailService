@@ -1,6 +1,7 @@
 package com.myauth.mailservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +20,7 @@ public class MailConfig {
     @Value("${mail.password}")
     private String PASSWORD;
     @Bean
+    @ConditionalOnProperty(prefix = "mail")
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
