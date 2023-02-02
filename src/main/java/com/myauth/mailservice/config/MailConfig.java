@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.Properties;
 
 @Configuration
+@ConditionalOnProperty(prefix ="mail",name="username")
 public class MailConfig {
 
     @Value("${mail.username}")
@@ -20,7 +21,6 @@ public class MailConfig {
     @Value("${mail.password}")
     private String PASSWORD;
     @Bean
-    @ConditionalOnProperty(prefix = "mail")
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
