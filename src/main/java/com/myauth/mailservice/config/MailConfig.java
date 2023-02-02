@@ -6,26 +6,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Properties;
 
 @Configuration
 public class MailConfig {
 
-    @Value("mail.username")
+    @Value("${mail.username}")
      private  String USER_NAME;
 
-    @Value("mail.password")
+    @Value("${mail.password}")
     private String PASSWORD;
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        byte[] userName = Base64.getDecoder().decode(USER_NAME);
-        mailSender.setUsername(userName.toString());
-        byte[] password = Base64.getDecoder().decode(PASSWORD);
-        mailSender.setPassword(password.toString());
+        String userName = new String(Base64.getDecoder().decode(USER_NAME.getBytes(StandardCharsets.UTF_8)));
+        mailSender.setUsername(userName);
+        String password = new String(Base64.getDecoder().decode(PASSWORD.getBytes(StandardCharsets.UTF_8)));
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
