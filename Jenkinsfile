@@ -11,7 +11,7 @@ node {
         }
     stage('Build image') {
 
-       app = docker.build("verdant-tempest-376308/myauthapp")
+       app = docker.build("verdant-tempest-376308/myauthapp-emailservice")
     }
 
     stage('Push image to gcr') {
